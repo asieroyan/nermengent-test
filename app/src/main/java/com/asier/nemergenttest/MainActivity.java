@@ -1,6 +1,7 @@
-package com.example.nemergenttest;
+package com.asier.nemergenttest;
 
 import androidx.appcompat.app.AppCompatActivity;
+// import com.asier.nemergenttest.ActivityMainBinding;
 
 import android.os.Bundle;
 

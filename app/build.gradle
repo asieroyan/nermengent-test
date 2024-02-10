@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.nemergenttest'
+    namespace 'com.asier.nemergenttest'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.nemergenttest"
+        applicationId "com.asier.nemergenttest"
         minSdk 29
         targetSdk 34
         versionCode 1

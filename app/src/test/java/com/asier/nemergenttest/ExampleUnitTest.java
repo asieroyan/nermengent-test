@@ -1,4 +1,4 @@
-package com.example.nemergenttest;
+package com.asier.nemergenttest;
 
 import org.junit.Test;
 
