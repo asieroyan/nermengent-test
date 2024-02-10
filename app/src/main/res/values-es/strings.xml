@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NemergentTest</string>
+    <string name="picture_action">Sacar foto</string>
+    <string name="ping_action">Abrir ventana de pings</string>
+</resources>
