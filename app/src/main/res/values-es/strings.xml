@@ -3,4 +3,10 @@
     <string name="app_name">NemergentTest</string>
     <string name="picture_action">Sacar foto</string>
     <string name="ping_action">Abrir ventana de pings</string>
+    <string name="ping_start_button">Empezar</string>
+    <string name="ping_stop_button">Detener</string>
+    <string name="num_tries_hint">Introduce el número de intentos a realizar</string>
+    <string name="successes">Éxitos</string>
+    <string name="failures">Fallos</string>
+    <string name="close">Cerrar</string>
 </resources>

@@ -2,4 +2,10 @@
     <string name="app_name">NemergentTest</string>
     <string name="picture_action">Take picture</string>
     <string name="ping_action">Open ping window</string>
+    <string name="ping_start_button">Start</string>
+    <string name="ping_stop_button">Stop</string>
+    <string name="num_tries_hint">Enter the number of tries you want to execute</string>
+    <string name="successes">Successes</string>
+    <string name="failures">Failures</string>
+    <string name="close">Close</string>
 </resources>
