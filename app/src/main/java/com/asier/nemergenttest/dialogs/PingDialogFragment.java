@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
+import androidx.work.Data;
 import androidx.work.ListenableWorker;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
@@ -42,11 +43,19 @@ public class PingDialogFragment extends DialogFragment {
             Log.d("dev-FLAG", "STOP BUTTON ON CLICK LISTENER");
             this.stopLoop();
         });
+        mBinding.closeButton.setOnClickListener(view -> {
+            this.dismiss();
+        });
         return mBinding.getRoot();
     }
 
-    public void makePing() {
+    public void startPings(Integer numTries) {
+        Data pingData = new Data.Builder()
+                .putInt("numTries", numTries)
+                .build();
         OneTimeWorkRequest pingSystemOtwr= new OneTimeWorkRequest.Builder(PingGoogleWS.class)
+                .setInputData(pingData)
+                .addTag("pingTask")
                 .build();
 
         WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(pingSystemOtwr.getId())
@@ -54,26 +63,10 @@ public class PingDialogFragment extends DialogFragment {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if(workInfo != null && workInfo.getState().isFinished()){
-
-                            String result = workInfo.getOutputData().getString("statusCode");
-                            if (Integer.parseInt(result) == 200) {
-
-                                Log.d("dev-PING RESULT 2", result);
-                                totalSuccess ++;
-                            }
-                            else {
-                                totalFailures ++;
-                            }
-                            Log.d("dev-NUM TRIES 2", numTries.toString());
-                            Log.d("dev-IS LOOP ACTIVE 2", isLoopActive.toString());
-                            Log.d("dev-TOTAL SUCCESSES", totalSuccess.toString());
-                            Log.d("dev-TOTAL FAILURES", totalFailures.toString());
-                            if (isLoopActive && numTries > 1) {
-                                numTries --;
-                                makePing();
-
-                            } else {
-                                stopLoop();
+                            String successes = workInfo.getOutputData().getString("totalSuccesses");
+                            String failures = workInfo.getOutputData().getString("totalFailures");
+                            if (successes != null && failures != null) {
+                                showResults(successes, failures);
                             }
                         }
                     }
@@ -88,14 +81,18 @@ public class PingDialogFragment extends DialogFragment {
             this.totalFailures = 0;
             this.totalSuccess = 0;
             this.numTries = numTries;
-            makePing();
+            startPings(numTries);
         }
     }
 
     public void stopLoop() {
-        String successText = getString(R.string.successes) + ": " + totalSuccess.toString();
+        WorkManager.getInstance(requireContext()).cancelAllWorkByTag("pingTask");
+    }
+
+    public void showResults(String successes, String failures) {
+        String successText = getString(R.string.successes) + ": " + successes;
         mBinding.SuccessesText.setText(successText);
-        String failuresText = getString(R.string.failures) + ": " + totalFailures.toString();
+        String failuresText = getString(R.string.failures) + ": " + failures;
         mBinding.FailuresText.setText(failuresText);
     }
 

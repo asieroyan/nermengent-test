@@ -3,7 +3,9 @@ package com.asier.nemergenttest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.asier.nemergenttest.databinding.ActivityMainBinding;
 import com.asier.nemergenttest.dialogs.PingDialogFragment;
