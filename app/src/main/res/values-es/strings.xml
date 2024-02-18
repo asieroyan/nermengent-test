@@ -9,4 +9,5 @@
     <string name="successes">Éxitos</string>
     <string name="failures">Fallos</string>
     <string name="close">Cerrar</string>
+    <string name="not_value_error">Introduce un valor</string>
 </resources>

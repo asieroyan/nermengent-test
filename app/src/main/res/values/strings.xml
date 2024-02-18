@@ -8,4 +8,5 @@
     <string name="successes">Successes</string>
     <string name="failures">Failures</string>
     <string name="close">Close</string>
+    <string name="not_value_error">Please enter a value</string>
 </resources>
