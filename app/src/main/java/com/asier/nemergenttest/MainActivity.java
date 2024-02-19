@@ -4,12 +4,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -20,14 +19,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ArrayList<Picture> pictures;
     private DBController db;
+    private Boolean isItemLongClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +58,15 @@ public class MainActivity extends AppCompatActivity {
         setPicturesAdapter();
 
         mBinding.imageListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            if (!isItemLongClick) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
 
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(FileProvider.getUriForFile(this, "com.asier.nemergenttest.provider", new File(pictures.get(i).getRoute())), "image/*");
+                startActivity(intent);
+            }
+
+            isItemLongClick = false;
         });
 
         mBinding.imageListView.setOnItemLongClickListener(((adapterView, view, i, l) -> {
@@ -71,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
             alert.setTitle(R.string.delete_confirmation_title);
             alert.setMessage(R.string.delete_confirmation_text);
             alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                // continue with delete
                 db.removePicture(pictures.get(i).id());
                 pictures.remove(i);
                 setPicturesAdapter();
             });
             alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel());
             alert.show();
+            isItemLongClick = true;
             return false;
         }));
 
@@ -208,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPicturesAdapter() {
         pictures = db.getPictures();
-        
+
         PictureAdapter picsAdapter = new PictureAdapter(
                 this,
                 pictures
