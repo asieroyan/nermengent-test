@@ -9,4 +9,7 @@
     <string name="failures">Failures</string>
     <string name="close">Close</string>
     <string name="not_value_error">Please enter a value</string>
+    <string name="pic_preview" translatable="false">Pic preview</string>
+    <string name="delete_confirmation_title">Delete</string>
+    <string name="delete_confirmation_text">Do you want to delete the picture?</string>
 </resources>

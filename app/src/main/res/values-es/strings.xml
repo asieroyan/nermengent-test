@@ -10,4 +10,6 @@
     <string name="failures">Fallos</string>
     <string name="close">Cerrar</string>
     <string name="not_value_error">Introduce un valor</string>
+    <string name="delete_confirmation_title">Eliminar</string>
+    <string name="delete_confirmation_text">¿Quieres eliminar la foto?</string>
 </resources>

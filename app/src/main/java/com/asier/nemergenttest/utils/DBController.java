@@ -5,9 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -47,7 +44,7 @@ public class DBController extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertPicture(String timestamp, String location, String route) {
+    public void insertPicture(String timestamp, String location, String route) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + PIC_LOCATION + ", " + PIC_DATE + ", " + PIC_ROUTE + ") VALUES(?,?,?)";
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement stmt = db.compileStatement(sql);
@@ -57,13 +54,18 @@ public class DBController extends SQLiteOpenHelper {
         stmt.bindString(3, route);
         stmt.executeInsert();
         db.close();
-        return true;
+    }
+
+    public void removePicture(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, "id=?", new String[]{String.valueOf(id)});
     }
 
     public ArrayList<Picture> getPictures() {
         ArrayList<Picture> result = new ArrayList<Picture>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {
+                PIC_ID,
                 PIC_DATE,
                 PIC_LOCATION,
                 PIC_ROUTE,
@@ -74,10 +76,11 @@ public class DBController extends SQLiteOpenHelper {
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-            LocalDateTime localDate = LocalDateTime.parse(cursor.getString(1), formatter);
+            LocalDateTime localDate = LocalDateTime.parse(cursor.getString(2), formatter);
             Picture pic = new Picture(
+                    cursor.getInt(0),
                     Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()),
-                    cursor.getString(2),
+                    cursor.getString(1),
                     cursor.getString(3)
             );
             result.add(pic);
