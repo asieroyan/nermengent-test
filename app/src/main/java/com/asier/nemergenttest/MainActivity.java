@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
             DialogFragment pingDialog = new PingDialogFragment();
             pingDialog.show(getSupportFragmentManager(), "");
         });
-        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
