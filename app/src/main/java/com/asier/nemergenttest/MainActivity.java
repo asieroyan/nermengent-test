@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
 
         db = new DBController(this);
-        pictures = db.getPictures();
         setPicturesAdapter();
 
         mBinding.imageListView.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                                     location,
                                     file.getPath()
                             );
-                            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+                            setPicturesAdapter();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -208,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPicturesAdapter() {
+        pictures = db.getPictures();
+        
         PictureAdapter picsAdapter = new PictureAdapter(
                 this,
                 pictures
