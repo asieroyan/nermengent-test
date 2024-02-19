@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.asier.nemergenttest.R;
@@ -31,7 +29,12 @@ public class PingDialogFragment extends DialogFragment {
         mBinding = FragmentDialogPingBinding.inflate(getLayoutInflater());
         sharedPrefs = requireContext().getSharedPreferences("com.asier.nemergenttest", Context.MODE_PRIVATE);
 
+        setUpListeners();
 
+        return mBinding.getRoot();
+    }
+
+    private void setUpListeners () {
         mBinding.startButton.setOnClickListener(view -> {
             if (mBinding.numTriesEditText.getText().toString().equals("")) {
                 Toast.makeText(requireContext(), R.string.not_value_error, Toast.LENGTH_SHORT).show();
@@ -54,8 +57,6 @@ public class PingDialogFragment extends DialogFragment {
         });
 
         mBinding.closeButton.setOnClickListener(view -> this.dismiss());
-
-        return mBinding.getRoot();
     }
 
     public void startPings() {
@@ -66,7 +67,7 @@ public class PingDialogFragment extends DialogFragment {
         WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(pingSystemOtwr.getId())
                 .observe(this, workInfo -> {
 
-                    if(workInfo != null && workInfo.getState().isFinished()){
+                    if(workInfo != null && workInfo.getState().isFinished()) {
                         if (sharedPrefs.getBoolean("isEnd", false)) {
                             isStopped = false;
                         }
@@ -74,7 +75,6 @@ public class PingDialogFragment extends DialogFragment {
                     }
                 });
         WorkManager.getInstance(requireContext()).enqueue(pingSystemOtwr);
-
     }
 
     public void stopLoop() {

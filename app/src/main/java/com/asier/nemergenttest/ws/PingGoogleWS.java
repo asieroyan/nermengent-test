@@ -20,6 +20,10 @@ public class PingGoogleWS extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        /*
+            This task loops in the background until the tries are over or the task is cancelled, counting successful and failed pings.
+            It communicates with its caller by SharedPreferences so the data is always up to date.
+         */
         String endpoint = "https://www.google.com";
         HttpURLConnection urlConnection;
         try {
