@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,11 +33,11 @@ public class DBController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_NAME + " ("
+        String query = " CREATE TABLE " + TABLE_NAME + " ("
                 + PIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PIC_DATE + "DATE, "
-                + PIC_LOCATION + "TEXT"
-                + PIC_ROUTE + " TEXT)";
+                + PIC_DATE + " DATE, "
+                + PIC_LOCATION + " TEXT, "
+                + PIC_ROUTE + " TEXT);";
         db.execSQL(query);
     }
 
@@ -72,7 +73,8 @@ public class DBController extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            LocalDateTime localDate = LocalDateTime.parse(cursor.getString(1));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+            LocalDateTime localDate = LocalDateTime.parse(cursor.getString(1), formatter);
             Picture pic = new Picture(
                     Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()),
                     cursor.getString(2),
